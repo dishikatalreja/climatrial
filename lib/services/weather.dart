@@ -3,15 +3,21 @@ import 'package:climatrial/services/networking.dart';
 import 'package:flutter/material.dart';
 
 const apiKey = 'f54882d423a394dba2e8075a71d3c408';
+const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
+  Future<dynamic> getCityWeather(String cityName)async{
+    NetworkHelper networkHelper = NetworkHelper('$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric');
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
 
-  dynamic getCurrentLocation() async {
+  Future<dynamic> getCurrentLocation() async {
 
     Location location = Location();
     await location.getCurrentLocation();
     NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
+        '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
     dynamic weatherData = await networkHelper.getData();
     debugPrint("weatherData: $weatherData");
     return weatherData;
